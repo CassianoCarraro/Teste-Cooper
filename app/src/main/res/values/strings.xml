@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Teste de Cooper</string>
+
+    <string name="navigation_drawer_open">Abrir navegação</string>
+    <string name="navigation_drawer_close">Fechar navegação</string>
+
+    <string name="menuItemPerfil">Perfil</string>
+    <string name="menuItemIniciar">Teste de Cooper</string>
+    <string name="menuItemResultados">Resultados</string>
+
+    <string name="lbNavNome">Anônimo</string>
+
+    <string name="btnIniciar">Iniciar Teste</string>
+    <string name="btnResetar">Resetar</string>
+
+    <string name="lbDistancia">Distância</string>
+    <string name="lbVelocidade">Velocidade</string>
+    <string name="tvDistancia">0,00 m</string>
+    <string name="tvVelocidade">0,00 m/s</string>
+
+    <string name="tvResultados">Ainda não exitem resultados!</string>
+
+    <string name="lbNome">Nome</string>
+    <string name="lbIdade">Idade</string>
+    <string name="lbSexo">Sexo</string>
+    <string name="lbMasculino">Masculino</string>
+    <string name="lbFeminino">Feminino</string>
+    <string name="btnSalvar">Salvar</string>
+</resources>
