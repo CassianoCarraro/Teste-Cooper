@@ -1,28 +1,26 @@
 package com.cooper.dc.testecooper;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.concurrent.ExecutionException;
 
-public class TesteCooperAction implements View.OnClickListener, Chronometer.OnChronometerTickListener{
+public class TesteCooperAction implements View.OnClickListener, Chronometer.OnChronometerTickListener {
     private TesteCooperFragment contexto;
     private GPSAction gpsAction;
     private long tempoDecorrido;
     private Double velocidadeMedia;
     private DecimalFormat formatoDecimal;
     private ResultadoModel ultimoResultado;
+
+
+
 
     public TesteCooperAction(TesteCooperFragment contexto) {
         this.contexto = contexto;
@@ -69,14 +67,27 @@ public class TesteCooperAction implements View.OnClickListener, Chronometer.OnCh
     }
 
     public void finalizar() {
+        PerfilAction perfilAction = new PerfilAction(contexto.getActivity());
+        int idade = perfilAction.getPerfil().getIdade();
+        int sexo = perfilAction.getPerfil().getSexo();
+
         Double distancia = gpsAction.getDistancia();
-        ultimoResultado = new ResultadoModel(10, velocidadeMedia, distancia, "CLASSIFICAÇÃO");
+        PostAsync executePost = new PostAsync(idade, distancia, sexo);
+        String classificacao = null;
+        try {
+            classificacao = executePost.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        ultimoResultado = new ResultadoModel(10, velocidadeMedia, distancia, classificacao);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(contexto.getActivity());
         alert.setTitle("Teste finalizado");
         alert.setMessage("Distância percorrida: " + formatoDecimal.format(distancia) +
-            "\nVelocidade média: " + formatoDecimal.format(velocidadeMedia) +
-            "\n\nPreparo físico: (obter informação API)"
+                "\nVelocidade média: " + formatoDecimal.format(velocidadeMedia) +
+                "\n\nPreparo físico: " + classificacao
         );
         alert.setPositiveButton("Salvar", new DialogInterface.OnClickListener() {
             @Override
@@ -113,4 +124,6 @@ public class TesteCooperAction implements View.OnClickListener, Chronometer.OnCh
 
         contexto.getActivity().getContentResolver().insert(ResultadoContentProvider.CONTENT_URI, valores);
     }
+
+
 }
